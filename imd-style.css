@@ -1,0 +1,158 @@
+#c-block {
+    position: relative;
+    margin:0 auto; 
+}
+
+.calendar-card-wide.mdl-card {
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media all and ( min-width: 550px ) {
+
+  .calendar-card-wide.mdl-card {
+    width: 90%;
+  }
+}
+
+@media all and ( min-width: 786px ) {
+
+  .calendar-card-wide.mdl-card {
+    width: 80%;
+  }
+}
+
+@media all and ( min-width: 1100px ) {
+
+  .calendar-card-wide.mdl-card {
+    width: 50%;
+  }
+}
+
+.widget-card-wide.mdl-card {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.calendar-card-wide > .mdl-card__title, .widget-card-wide > .mdl-card__title {
+  color: #fff;
+  /*height: 100px;*/
+  background: #795548;
+  font-size: 2.1em;
+  border-top: 1px solid #fff;
+}
+.calendar-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+
+.mdl-card__title h2 {
+    margin: 0 auto;
+    color: #fff;
+}
+.mdl-card__title h3 {
+    margin: 0 auto;
+    color: #fff;
+}
+
+.mdl-card__supporting-text {
+    width: 100%;
+    padding: 0px;
+}
+
+.mdl-data-table tbody tr:hover {
+    background: transparent;
+}
+
+.imd-center-text {
+    text-align: center;
+}
+
+.mdl-button--fab {
+    font-size: 16px;
+}
+
+.imd-table {
+    width: 90%;
+    border: none !important;
+    position: relative;
+}
+
+@media all and ( min-width: 450px ) {
+
+  .imd-table  {
+    width: 100%;
+  }
+}
+
+#imd-month-table.imd-table {
+    height: 350px;
+
+}
+
+.imd-table tr td {
+    border: none !important;
+}
+
+.imd-table td {
+    height: 33.33%;
+    width: 25%;
+}
+
+.imd-table th {
+    width: 25%;
+}
+
+.imd-table tr td span.current {
+    padding: 15px 10px;
+    color: #fff;
+    background: #795548;
+    line-height: 40px;
+}
+
+.mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
+    text-align: center;
+}
+
+#imd-date-table thead tr {
+    border-bottom: 2px solid #ddd;
+}
+
+.mdl-data-table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.mdl-data-table td {
+    text-align: center;
+    color: #000;
+}
+
+.mdl-data-table td.imd-opacity{
+    opacity: 0.5;
+    background: #ddd;
+}
+
+.imd-hidden {
+    display: none;
+}
+
+.imd-left {
+    float: left;
+}
+
+.imd-right {
+    float: right;
+}
+
+.imd-error-notice {
+  width: 100%;
+  clear: both;
+  margin-top: 2px;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px ;
+  background-color: rgba(248, 59, 89, 0.7);
+  background-repeat: no-repeat;
+  background-position: 168px, 0;
+  background-size: 6% ;
+}
