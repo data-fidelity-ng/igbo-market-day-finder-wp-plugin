@@ -5,7 +5,7 @@ Plugin URI:
 Description: Finds the Igbo Market day for any Gregorian Calendar date.
 Author: Silver Ibenye
 Version: 1.0
-Author URI: http://slybase.com/
+Author URI: http://sibenye.com/
 Text Domain: imd-finder
  */
 defined( 'ABSPATH' ) or die( 'No direct script access allowed' );
@@ -22,7 +22,7 @@ function imd_load_functions() {
 }
 
 // Ajax Handler
-// both logged in and not logged in users should be able to send this Ajax request
+// both logged in and not logged in users should be able to send these Ajax request
 add_action( 'wp_ajax_nopriv_imd_handle_calendar_post_request', 'imd_handle_calendar_post_request' );
 add_action( 'wp_ajax_imd_handle_calendar_post_request', 'imd_handle_calendar_post_request' );
 
@@ -50,6 +50,49 @@ function imd_handle_calendar_post_request(){
     wp_die();
 }
 
+add_action( 'wp_ajax_nopriv_imd_generate_math_captcha', 'imd_generate_math_captcha' );
+add_action( 'wp_ajax_imd_generate_math_captcha', 'imd_generate_math_captcha' );
+
+function imd_generate_math_captcha() {
+	try {
+		$randNumber1 = rand(1, 9);
+		$randNumber2 = rand(2, 9);
+
+		$expectedTotal = $randNumber1 + $randNumber2;
+
+		//save the expected total
+		update_option( 'imd_math_captcha_result', $expectedTotal );
+
+		$response = array('randNumber1' => $randNumber1, 'randNumber2' => $randNumber2);
+		echo json_encode($response);
+	} catch (Exception $ex) {
+		$response = array('error' => $ex->getMessage());
+		echo json_encode($response);
+	}
+	
+	// Always exit when doing Ajax
+    wp_die();
+}
+
+add_action( 'wp_ajax_nopriv_imd_verify_math_captcha', 'imd_verify_math_captcha' );
+add_action( 'wp_ajax_imd_verify_math_captcha', 'imd_verify_math_captcha' );
+
+function imd_verify_math_captcha() {
+	$receivedTotal = $_REQUEST["mathCaptchaTotal"];
+	$expectedTotal = get_option('imd_math_captcha_result');
+
+	if ($receivedTotal == $expectedTotal) {
+		$response = array('success' => true);
+		echo json_encode($response);;
+	} else {
+		$response = array('success' => false);
+		echo json_encode($response);;
+	}
+
+	// Always exit when doing Ajax
+    wp_die();
+}
+
 add_action( 'wp_enqueue_scripts', 'enqueue_my_scripts');
 
 function enqueue_my_scripts() {
@@ -67,7 +110,7 @@ function enqueue_my_scripts() {
 	$protocol = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
 	$params = array(
 			// Get the url to the admin-ajax.php file using admin_url()
-			'ajaxurl' => admin_url( 'admin-ajax.php', $protocol ),
+			'ajaxurl' => admin_url( 'admin-ajax.php', $protocol )
 		);
 	// Print the script to our page
 	wp_localize_script( 'imd_ajax', 'imd_params', $params );

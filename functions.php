@@ -216,7 +216,7 @@ function imd_get_base_year($key){
     return $keyMappings[$key];
 }
 
-/**
+/*
   Validates the request from form submission  
  */
 function imd_validate_request($year, $month = NULL, $day = NULL){
@@ -273,7 +273,7 @@ function imd_validate_request($year, $month = NULL, $day = NULL){
 	return;
 }
 
-/**
+/*
 Gets the numbers of days
 from the beginning of the year passed in
 to the day of the month passed in

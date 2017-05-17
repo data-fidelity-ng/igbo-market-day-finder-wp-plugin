@@ -49,10 +49,38 @@ var current_month = month_index_map[current_month_index];
 var focus_year = current_year;
 var focus_month = current_month;
 var year_response = '';
+var validCaptcha = false;
+
+jQuery(document).ready(function() {
+	resetMathCaptcha();
+});
 
 function showFindWidget() {
 	jQuery('#imd-search-result').addClass('imd-hidden');
 	jQuery('#imd-find-widget').removeClass('imd-hidden');
+
+}
+
+function resetMathCaptcha() {
+	jQuery("#imd-math-captcha-result").val("");
+
+	var postData = {
+			'action': 'imd_generate_math_captcha',
+			'reset' : 'true'
+		};
+
+	jQuery.post( imd_params.ajaxurl, postData).done(function( res ) {
+		var result = JSON.parse(res);
+		var randNum1 = result.randNumber1;
+		var randNum2 = result.randNumber2;
+
+		var labelText = randNum1 + ' + ' + randNum2;
+		jQuery("#imd-math-captcha-result-label").html(labelText);
+
+		//jQuery("#imd-rand-num1").text(randNum1);
+		//jQuery("#imd-rand-num2").text(randNum2);
+
+	});
 
 }
 
@@ -73,7 +101,10 @@ function processResponse(response, errorMessage, spinner) {
 	var marketDay_span = document.getElementById('market-day');
 	
 	//stop loading spinner
-	spinner.stop();
+	if (spinner) {
+		spinner.stop();
+	}
+	
 	if (errorMessage){
 
 		error_element = document.getElementById('imd-error');
@@ -91,36 +122,87 @@ function processResponse(response, errorMessage, spinner) {
 			
 }
 
+function captchaResultExists() {
+	if (document.getElementById('imd-math-captcha-result') === undefined) {
+		console.error("No element with id 'imd-math-captcha-result'");
+		return false;
+	} else {
+		var captchaResult = document.getElementById('imd-math-captcha-result').value
+
+		if (captchaResult === '' || captchaResult === null || captchaResult === undefined) {
+			console.error("'imd-math-captcha-result' is empty")
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+
 function postSingleCalendarDateRequest(processResponse){
 	
 	if (typeof processResponse != 'function') processResponse = function () {};
 		
-	var postData = {
+	var calendarPostData = {
 			'action': 'imd_handle_calendar_post_request',
 			'c_year': document.getElementById('c-year').value,
 			'c_month': document.getElementById('c-month').value,
 			'c_day': document.getElementById('c-day').value
 	};
-	
+
 	//start loading spinner
 	var target = document.getElementById('loading');
 	var spinner = new Spinner(spinOptions()).spin(target);
 
-	// Post to the server
-	jQuery.post( imd_params.ajaxurl, postData, function( data ) {
+	//verify recaptcha
+	if (!captchaResultExists()) {
+		//return
+		processResponse(null, 'Invalid Math Captcha', spinner);
 		
-		var result = JSON.parse(data);
+	} else {
+		var captchaResult = document.getElementById('imd-math-captcha-result').value
+		var captchaVerifyPostData = {
+				'action': 'imd_verify_math_captcha',
+				'mathCaptchaTotal' : captchaResult
+			};
 
-		if (result.error){
-			var errorMessage = result.error;
-			processResponse(null, errorMessage, spinner);
-		} else {
-			var response = { 'date': result.Date,
-							 'igboDay': result.IgboDay
-							};
-			processResponse(response, null, spinner);
-		}
-	});
+		jQuery.post( imd_params.ajaxurl, captchaVerifyPostData).done(function( data ) {
+				
+				var result = JSON.parse(data);
+
+				if (result.success === true){
+					jQuery.post( imd_params.ajaxurl, calendarPostData, function( res ) {
+			
+						var result = JSON.parse(res);
+
+						if (result.error){
+							var errorMessage = result.error;
+							processResponse(null, errorMessage, spinner);
+						} else {
+							var response = { 'date': result.Date,
+											'igboDay': result.IgboDay
+											};
+							processResponse(response, null, spinner);
+						}
+					});
+				} else {
+					validCaptcha = false;
+					var errorMessage = "Captcha result is invalid";
+					processResponse(null, errorMessage, spinner);
+					console.error(errorMessage);
+					
+				}
+			}).fail(function(){
+				validCaptcha = false;
+				var errorMessage = "Error verifying Captcha result";
+				processResponse(null, errorMessage, spinner);
+				console.error(errorMessage);
+					
+			}).always(function(){
+				//reset captcha
+ 				resetMathCaptcha();
+			});
+		
+	}
 }
 
 function postCalendarYearRequest(yearRequested, monthRequested = '') {

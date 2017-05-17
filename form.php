@@ -14,19 +14,7 @@ function imd_get_form_template(){
 		.market-day{color:#68b12f; font-weight: bold;}
 		.error-notice {background:#FFBABA; color:#D8000C; padding:2px 5px; font-size:11px}
 	</style>
-	
-<!--<div id="main-section">
-<h2 class="c-heading">Igbo Market Day Finder</h2>
-<div name="imd_form" class="c-form">
-<label><span id="error-notice" style="display: none" class="error-notice"> </span> <span id="title">Put In Calendar Date</span></label>
-<br/><br/>
-<input id="c--year" required autofocus autocomplete="off" placeholder="YYYY" width="60" type="number" maxlength="10" name="c-year"> - 
-<input id="c--month" required autocomplete="off" placeholder="MM" width="60" type="number" maxlength="2" name="c-month"> - 
-<input id="c--day" required autocomplete="off" placeholder="DD" width="60" type="number" maxlength="2" name="c-day">
-&nbsp;
-<button id="imd_btn" type="button" name="c-submit" onClick="sendCalRequest()" value="Find">Find</button>
-</div>
-</div>-->
+
 <br/>
 
 
@@ -73,9 +61,26 @@ function imd_get_form_template(){
 				</div>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<a onClick="sendCalRequest()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				Find
-				</a>
+				<div class="mdl-grid">
+					<div class="mdl-cell mdl-cell--10-col">
+						<div class="imd-left" >
+							<form action="#">
+							<div id="imd-captcha" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<input id="imd-math-captcha-result" class="mdl-textfield__input" type="number" name="imd-math-captcha-result" maxlength=2 size=2 />
+							<label id="imd-math-captcha-result-label" class="mdl-textfield__label" for="imd-math-captcha-result"></label>
+							</div>
+							<span class="captcha-copy">(Are you human, or spambot?)</span>
+							</form>
+						</div>
+					</div>
+					<div class="mdl-cell mdl-cell--2-col">
+						<button
+							class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent imd-right"
+							onclick="sendCalRequest()">
+							Find
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -95,7 +100,7 @@ function imd_get_form_template(){
 				</div>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<a onClick="showFindWidget()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+				<a onClick="showFindWidget()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
 				Search Again
 				</a>
 			</div>

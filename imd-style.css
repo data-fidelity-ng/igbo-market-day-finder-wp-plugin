@@ -156,3 +156,11 @@
   background-position: 168px, 0;
   background-size: 6% ;
 }
+
+.captcha-copy {
+    font-size: 10px !important;
+}
+
+#imd-captcha.mdl-textfield {
+    max-width: 30%;
+}
