@@ -15,12 +15,9 @@ function imd_get_form_template(){
 		.error-notice {background:#FFBABA; color:#D8000C; padding:2px 5px; font-size:11px}
 	</style>
 
-<br/>
+	<br/>
 
-
-
-
-<div id="imd-find-widget" class="mdl-grid">
+	<div id="imd-find-widget" class="mdl-grid">
 		<div class="mdl-cell mdl-cell--8-col widget-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title  mdl-card--expand">
 				<h2 class="mdl-card__title-text">Igbo Market Day Finder</h2>
@@ -81,6 +78,9 @@ function imd_get_form_template(){
 						</button>
 					</div>
 				</div>
+				<div class="footer-credit">
+					Developed by <a target="_blank" href="http://www.sibenye.com/">Silver Ibenye</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -100,14 +100,20 @@ function imd_get_form_template(){
 				</div>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<a onClick="showFindWidget()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
-				Search Again
-				</a>
+				<div>
+					<a onClick="showFindWidget()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+					Search Again
+					</a>
+				</div>
+				<br/>
+				<div class="footer-credit">
+					Developed by <a target="_blank" href="http://www.sibenye.com/">Silver Ibenye</a>
+				</div>
 			</div>
 		</div>
 	</div>
 	<!-- Spinner -->
 	<div id="loading"></div>
-	
-	<?php return ob_get_clean();
+
+<?php return ob_get_clean();
 }

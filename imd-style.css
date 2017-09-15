@@ -164,3 +164,11 @@
 #imd-captcha.mdl-textfield {
     max-width: 30%;
 }
+
+.footer-credit {
+    font-size: 11px !important;
+}
+
+.footer-credit a {
+    color: #7C4DFF;
+}
