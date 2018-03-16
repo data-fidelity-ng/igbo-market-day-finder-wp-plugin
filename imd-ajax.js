@@ -52,7 +52,7 @@ var year_response = '';
 var validCaptcha = false;
 
 jQuery(document).ready(function() {
-	resetMathCaptcha();
+	imd_resetMathCaptcha();
 });
 
 function showFindWidget() {
@@ -61,7 +61,7 @@ function showFindWidget() {
 
 }
 
-function resetMathCaptcha() {
+function imd_resetMathCaptcha() {
 	jQuery("#imd-math-captcha-result").val("");
 
 	var postData = {
@@ -112,7 +112,7 @@ function processResponse(response, errorMessage, spinner) {
 		jQuery('#imd-error').removeClass('imd-hidden')
 		
 	} else {		
-		
+		window.scrollTo(0,0);
 		jQuery('#imd-find-widget').addClass('imd-hidden');
 		date_label.innerHTML = response['date'];
 		marketDay_span.innerHTML = response['igboDay'];
@@ -122,7 +122,7 @@ function processResponse(response, errorMessage, spinner) {
 			
 }
 
-function captchaResultExists() {
+function imd_captchaResultExists() {
 	if (document.getElementById('imd-math-captcha-result') === undefined) {
 		console.error("No element with id 'imd-math-captcha-result'");
 		return false;
@@ -154,7 +154,7 @@ function postSingleCalendarDateRequest(processResponse){
 	var spinner = new Spinner(spinOptions()).spin(target);
 
 	//verify recaptcha
-	if (!captchaResultExists()) {
+	if (!imd_captchaResultExists()) {
 		//return
 		processResponse(null, 'Invalid Math Captcha', spinner);
 		
@@ -199,7 +199,7 @@ function postSingleCalendarDateRequest(processResponse){
 					
 			}).always(function(){
 				//reset captcha
- 				resetMathCaptcha();
+ 				imd_resetMathCaptcha();
 			});
 		
 	}
