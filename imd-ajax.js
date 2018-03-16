@@ -112,11 +112,11 @@ function processResponse(response, errorMessage, spinner) {
 		jQuery('#imd-error').removeClass('imd-hidden')
 		
 	} else {		
-		window.scrollTo(0,0);
 		jQuery('#imd-find-widget').addClass('imd-hidden');
 		date_label.innerHTML = response['date'];
 		marketDay_span.innerHTML = response['igboDay'];
 		jQuery('#imd-search-result').removeClass('imd-hidden');
+		setTimeout(function () { window.scrollTo(0,0); },100);
 		
 	}
 			
