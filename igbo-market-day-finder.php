@@ -10,15 +10,15 @@ Text Domain: imd-finder
  */
 defined( 'ABSPATH' ) or die( 'No direct script access allowed' );
 
-define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'IMD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 //Hook for loading functions
 add_action( 'init', 'imd_load_functions' );
 
 function imd_load_functions() {
-	require_once( PLUGIN_DIR . 'functions.php' );
-	require_once( PLUGIN_DIR . 'form.php' );
-	require_once( PLUGIN_DIR . 'calendar-form.php' );
+	require_once( IMD_PLUGIN_DIR . 'functions.php' );
+	require_once( IMD_PLUGIN_DIR . 'form.php' );
+	require_once( IMD_PLUGIN_DIR . 'calendar-form.php' );
 }
 
 // Ajax Handler
