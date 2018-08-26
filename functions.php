@@ -1,13 +1,6 @@
 <?php
 defined( 'ABSPATH' ) or die( 'No direct script access allowed' );
 
-/*
-add_action( 'init', 'imd_handle_post' );
-
-function imd_handle_post(){
-	
-}*/
-
 function imd_get_market_day_by_index($index){
 	$marketDays =["AFO", "NKWO", "EKE", "ORIE"];
 	return $marketDays[$index];
@@ -87,133 +80,62 @@ function imd_get_number_of_days_in_month($monthInt, $isLeapYear=false){
 }
 
 function imd_is_leap_year($baseYear){
-	$isLeapYear = false;
-	if (($baseYear % 4) == 0){
-		$isLeapYear = true;
-	}
-	return $isLeapYear;
+	return (($baseYear % 100) == 0) ? (($baseYear % 400) == 0) : (($baseYear % 4) == 0);
 }
 
-function imd_get_base_year($key){
+function imd_get_first_day_of_year($year) {
+	if ($year < 1) {
+		return null;
+	}
+	return date('l',strtotime(date($year.'-01-01')));
+}
+
+function imd_get_base_year_for_non_leap_year($key) {
 	$keyMappings = [
-		"0.00893" => array(1, "AFO", "SUNDAY"),
-		"0.01786" => array(2, "NKWO", "MONDAY"),
-		"0.02679" => array(3, "EKE", "TUESDAY"),
-		"0.03571" => array(4, "ORIE", "WEDNESDAY"),
-		"0.04464" => array(5, "NKWO", "FRIDAY"),
-		"0.05357" => array(6, "EKE", "SATURDAY"),
-		"0.06250" => array(7, "ORIE", "SUNDAY"),
-		"0.07143" => array(8, "AFO", "MONDAY"),
-		"0.08036" => array(9, "EKE", "WEDNESDAY"),
-		"0.08929" => array(10, "ORIE", "THURSDAY"),
-		"0.09821" => array(11, "AFO", "FRIDAY"),
-		"0.10714" => array(12, "NKWO", "SATURDAY"),
-		"0.11607" => array(13, "ORIE", "MONDAY"),
-		"0.12500" => array(14, "AFO", "TUESDAY"),
-		"0.13393" => array(15, "NKWO", "WEDNESDAY"),
-		"0.14286" => array(16, "EKE", "THURSDAY"),
-		"0.15179" => array(17, "AFO", "SATURDAY"),
-		"0.16071" => array(18, "NKWO", "SUNDAY"),
-		"0.16964" => array(19, "EKE", "MONDAY"),
-		"0.17857" => array(20, "ORIE", "TUESDAY"),
-		"0.18750" => array(21, "NKWO", "THURSDAY"),
-		"0.19643" => array(22, "EKE", "FRIDAY"),
-		"0.20536" => array(23, "ORIE", "SATURDAY"),
-		"0.21429" => array(24, "AFO", "SUNDAY"),
-		"0.22321" => array(25, "EKE", "TUESDAY"),
-		"0.23214" => array(26, "ORIE", "WEDNESDAY"),
-		"0.24107" => array(27, "AFO", "THURSDAY"),
-		"0.25000" => array(28, "NKWO", "FRIDAY"),
-		"0.25893" => array(29, "ORIE", "SUNDAY"),
-		"0.26786" => array(30, "AFO", "MONDAY"),
-		"0.27679" => array(31, "NKWO", "TUESDAY"),
-		"0.28571" => array(32, "EKE", "WEDNESDAY"),
-		"0.29464" => array(33, "AFO", "FRIDAY"),
-		"0.30357" => array(34, "NKWO", "SATURDAY"),
-		"0.31250" => array(35, "EKE", "SUNDAY"),
-		"0.32143" => array(36, "ORIE", "MONDAY"),
-		"0.33036" => array(37, "NKWO", "WEDNESDAY"),
-		"0.33929" => array(38, "EKE", "THURSDAY"),
-		"0.34821" => array(39, "ORIE", "FRIDAY"),
-		"0.35714" => array(40, "AFO", "SATURDAY"),
-		"0.36607" => array(41, "EKE", "MONDAY"),
-		"0.37500" => array(42, "ORIE", "TUESDAY"),
-		"0.38393" => array(43, "AFO", "WEDNESDAY"),
-		"0.39286" => array(44, "NKWO", "THURSDAY"),
-		"0.40179" => array(45, "ORIE", "SATURDAY"),
-		"0.41071" => array(46, "AFO", "SUNDAY"),
-		"0.41964" => array(47, "NKWO", "MONDAY"),
-		"0.42857" => array(48, "EKE", "TUESDAY"),
-		"0.43750" => array(49, "AFO", "THURSDAY"),
-		"0.44643" => array(50, "NKWO", "FRIDAY"),
-		"0.45536" => array(51, "EKE", "SATURDAY"),
-		"0.46429" => array(52, "ORIE", "SUNDAY"),
-		"0.47321" => array(53, "NKWO", "TUESDAY"),
-		"0.48214" => array(54, "EKE", "WEDNESDAY"),
-		"0.49107" => array(55, "ORIE", "THURSDAY"),
-		"0.50000" => array(56, "AFO", "FRIDAY"),
-		"0.50893" => array(57, "EKE", "SUNDAY"),
-		"0.51786" => array(58, "ORIE", "MONDAY"),
-		"0.52679" => array(59, "AFO", "TUESDAY"),
-		"0.53571" => array(60, "NKWO", "WEDNESDAY"),
-		"0.54464" => array(61, "ORIE", "FRIDAY"),
-		"0.55357" => array(62, "AFO", "SATURDAY"),
-		"0.56250" => array(63, "NKWO", "SUNDAY"),
-		"0.57143" => array(64, "EKE", "MONDAY"),
-		"0.58036" => array(65, "AFO", "WEDNESDAY"),
-		"0.58929" => array(66, "NKWO", "THURSDAY"),
-		"0.59821" => array(67, "EKE", "FRIDAY"),
-		"0.60714" => array(68, "ORIE", "SATURDAY"),
-		"0.61607" => array(69, "NKWO", "MONDAY"),
-		"0.62500" => array(70, "EKE", "TUESDAY"),
-		"0.63393" => array(71, "ORIE", "WEDNESDAY"),
-		"0.64286" => array(72, "AFO", "THURSDAY"),
-		"0.65179" => array(73, "EKE", "SATURDAY"),
-		"0.66071" => array(74, "ORIE", "SUNDAY"),
-		"0.66964" => array(75, "AFO", "MONDAY"),
-		"0.67857" => array(76, "NKWO", "TUESDAY"),
-		"0.68750" => array(77, "ORIE", "THURSDAY"),
-		"0.69643" => array(78, "AFO", "FRIDAY"),
-		"0.70536" => array(79, "NKWO", "SATURDAY"),
-		"0.71429" => array(80, "EKE", "SUNDAY"),
-		"0.72321" => array(81, "AFO", "TUESDAY"),
-		"0.73214" => array(82, "NKWO", "WEDNESDAY"),
-		"0.74107" => array(83, "EKE", "THURSDAY"),
-		"0.75000" => array(84, "ORIE", "FRIDAY"),
-		"0.75893" => array(85, "NKWO", "SUNDAY"),
-		"0.76786" => array(86, "EKE", "MONDAY"),
-		"0.77679" => array(87, "ORIE", "TUESDAY"),
-		"0.78571" => array(88, "AFO", "WEDNESDAY"),
-		"0.79464" => array(89, "EKE", "FRIDAY"),
-		"0.80357" => array(90, "ORIE", "SATURDAY"),
-		"0.81250" => array(91, "AFO", "SUNDAY"),
-		"0.82143" => array(92, "NKWO", "MONDAY"),
-		"0.83036" => array(93, "ORIE", "WEDNESDAY"),
-		"0.83929" => array(94, "AFO", "THURSDAY"),
-		"0.84821" => array(95, "NKWO", "FRIDAY"),
-		"0.85714" => array(96, "EKE", "SATURDAY"),
-		"0.86607" => array(97, "AFO", "MONDAY"),
-		"0.87500" => array(98, "NKWO", "TUESDAY"),
-		"0.88393" => array(99, "EKE", "WEDNESDAY"),
-		"0.89286" => array(100, "ORIE", "THURSDAY"),
-		"0.90179" => array(101, "NKWO", "SATURDAY"),
-		"0.91071" => array(102, "EKE", "SUNDAY"),
-		"0.91964" => array(103, "ORIE", "MONDAY"),
-		"0.92857" => array(104, "AFO", "TUESDAY"),
-		"0.93750" => array(105, "EKE", "THURSDAY"),
-		"0.94643" => array(106, "ORIE", "FRIDAY"),
-		"0.95536" => array(107, "AFO", "SATURDAY"),
-		"0.96429" => array(108, "NKWO", "SUNDAY"),
-		"0.97321" => array(109, "ORIE", "TUESDAY"),
-		"0.98214" => array(110, "AFO", "WEDNESDAY"),
-		"0.99107" => array(111, "NKWO", "THURSDAY"),
-		"0" => array(112, "EKE", "FRIDAY")
+		"Monday" => array(1, "NKWO", "MONDAY"),
+		"Tuesday" => array(2, "EKE", "TUESDAY"),
+		"Wednesday" => array(3, "ORIE", "WEDNESDAY"),
+		"Thursday" => array(9, "AFO", "THURSDAY"),
+		"Friday" => array(10, "NKWO", "FRIDAY"),
+		"Saturday" => array(5, "EKE", "SATURDAY"),
+		"Sunday" => array(6, "ORIE", "SUNDAY"),
 	];
-	
-    if ($key == null){
-        return null;
-    }
+
+	if ($key == null) {
+		return null;
+	}
+
     return $keyMappings[$key];
+}
+
+function imd_get_base_year_for_leap_year($key) {
+	$keyMappings = [
+		"Monday" => array(24, "NKWO", "MONDAY"),
+		"Tuesday" => array(8, "EKE", "TUESDAY"),
+		"Wednesday" => array(20, "ORIE", "WEDNESDAY"),
+		"Thursday" => array(4, "AFO", "THURSDAY"),
+		"Friday" => array(16, "NKWO", "FRIDAY"),
+		"Saturday" => array(28, "EKE", "SATURDAY"),
+		"Sunday" => array(12, "ORIE", "SUNDAY"),
+	];
+
+	if ($key == null) {
+		return null;
+	}
+
+    return $keyMappings[$key];
+}
+
+function imd_get_base_year($year){
+	$key = imd_get_first_day_of_year($year);
+	$isLeapYear = false;
+	$isLeapYear = imd_is_leap_year($year);
+
+	if ($isLeapYear) {
+		return imd_get_base_year_for_leap_year($key);
+	} else {
+		return imd_get_base_year_for_non_leap_year($key);
+	}
 }
 
 /*
@@ -326,18 +248,9 @@ function imd_get_number_of_days($baseYear, $monthInt, $dayInt){
 }
 
 function imd_get_single_market_day($yearIntValue, $monthIntValue, $dayIntValue){
-	$key = "0";
-
-    if(($yearIntValue % 112) != 0){
-        $floatValue = round($yearIntValue/112, 5);
-        $whole = floor($floatValue);
-        $key = sprintf("%.5f", ($floatValue - $whole));
-    }
-
-	#echo "\nKey: ". $key;
-    $baseYearProperties = imd_get_base_year($key);
+    $baseYearProperties = imd_get_base_year($yearIntValue);
     if ($baseYearProperties == null){
-		$error = "No Matching Calendar Year";
+		$error = "No Matching Calendar Year for year:".$yearIntValue;
 		throw new Exception($error);
     }
 	
@@ -492,3 +405,4 @@ function imd_look_up_market_days_for_calendar_year($year){
 }
 
 //echo json_encode(imd_get_market_days_in_year(2016));
+//echo json_encode(imd_look_up_market_day(2100, 03, 24));
