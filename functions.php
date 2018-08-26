@@ -110,13 +110,13 @@ function imd_get_base_year_for_non_leap_year($key) {
 
 function imd_get_base_year_for_leap_year($key) {
 	$keyMappings = [
-		"Monday" => array(24, "NKWO", "MONDAY"),
-		"Tuesday" => array(8, "EKE", "TUESDAY"),
-		"Wednesday" => array(20, "ORIE", "WEDNESDAY"),
-		"Thursday" => array(4, "AFO", "THURSDAY"),
-		"Friday" => array(16, "NKWO", "FRIDAY"),
-		"Saturday" => array(28, "EKE", "SATURDAY"),
-		"Sunday" => array(12, "ORIE", "SUNDAY"),
+		"Monday" => array(24, "EKE", "MONDAY"),
+		"Tuesday" => array(8, "ORIE", "TUESDAY"),
+		"Wednesday" => array(20, "AFO", "WEDNESDAY"),
+		"Thursday" => array(4, "NKWO", "THURSDAY"),
+		"Friday" => array(16, "EKE", "FRIDAY"),
+		"Saturday" => array(28, "ORIE", "SATURDAY"),
+		"Sunday" => array(12, "AFO", "SUNDAY"),
 	];
 
 	if ($key == null) {
