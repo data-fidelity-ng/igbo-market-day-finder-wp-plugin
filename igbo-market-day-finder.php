@@ -4,7 +4,7 @@ Plugin Name: Igbo Market Day Finder
 Plugin URI: 
 Description: Finds the Igbo Market day for any Gregorian Calendar date.
 Author: Silver Ibenye
-Version: 2.0
+Version: 2.1
 Author URI: http://sibenye.com/
 Text Domain: imd-finder
  */
